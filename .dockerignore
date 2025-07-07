@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+*.egg-info/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+.git/
+.gitignore
+
+# Logs
+*.log
+
+# Documentation
+*.md
+DEPLOYMENT*.md
+QUICK_START*.md
+HOSTINGER*.md
+
+# Deployment files
+deployment/
+.htaccess
+*.bat
+*.cgi
+wsgi.py
+run.py
+test_deployment.py
+
+# Docker
+.dockerignore
+Dockerfile
+
+# Other
+.vercel/
+railway.json
+vercel.json
+api/
