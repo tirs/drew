@@ -3,25 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drew Bootstrap Dashboard</title>
+    <title>🚀 Elite Trading Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --bg-primary: #0d1117;
-            --bg-secondary: #161b22;
-            --bg-tertiary: #21262d;
-            --border-color: #30363d;
-            --text-primary: #f0f6fc;
-            --text-secondary: #8b949e;
-            --accent-blue: #58a6ff;
-            --accent-green: #3fb950;
-            --accent-red: #f85149;
-            --accent-yellow: #d29922;
-            --accent-purple: #a5a5ff;
-            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            --glow: 0 0 20px rgba(88, 166, 255, 0.3);
+            --bg-primary: #0a0e1a;
+            --bg-secondary: #1a1f2e;
+            --bg-tertiary: #252b3d;
+            --bg-card: rgba(37, 43, 61, 0.8);
+            --border-color: #3d4458;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a9c0;
+            --text-muted: #6b7280;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --accent-yellow: #f59e0b;
+            --accent-purple: #8b5cf6;
+            --accent-cyan: #06b6d4;
+            --shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            --glow: 0 0 30px rgba(59, 130, 246, 0.3);
+            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            --gradient-danger: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
         }
 
         [data-theme="light"] {
@@ -48,41 +55,104 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            background: radial-gradient(ellipse at top, var(--bg-secondary) 0%, var(--bg-primary) 100%);
             color: var(--text-primary);
             min-height: 100vh;
             overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="%23ffffff" stroke-width="0.5" opacity="0.05"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            pointer-events: none;
+            z-index: -1;
         }
 
         .glass-card {
-            background: rgba(33, 38, 45, 0.8);
+            background: var(--bg-card);
             backdrop-filter: blur(20px);
             border: 1px solid var(--border-color);
-            border-radius: 16px;
+            border-radius: 20px;
             box-shadow: var(--shadow);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.6s;
+        }
+
+        .glass-card:hover::before {
+            left: 100%;
         }
 
         .glass-card:hover {
-            transform: translateY(-4px);
+            transform: translateY(-8px) scale(1.02);
             box-shadow: var(--glow), var(--shadow);
             border-color: var(--accent-blue);
         }
 
         .navbar-custom {
-            background: rgba(13, 17, 23, 0.95);
-            backdrop-filter: blur(20px);
+            background: rgba(10, 14, 26, 0.95);
+            backdrop-filter: blur(30px);
             border-bottom: 1px solid var(--border-color);
             padding: 1rem 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
         .navbar-brand {
-            font-weight: 700;
-            font-size: 1.5rem;
-            color: var(--accent-blue) !important;
+            font-weight: 800;
+            font-size: 1.6rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             display: flex;
             align-items: center;
             gap: 0.5rem;
+        }
+
+        .search-container {
+            position: relative;
+            max-width: 300px;
+        }
+
+        .search-input {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 8px 40px 8px 16px;
+            color: var(--text-primary);
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
         }
 
 
@@ -121,20 +191,27 @@
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 1.5rem;
             margin-bottom: 2rem;
+            max-width: 100%;
         }
 
         .stat-card {
-            background: linear-gradient(135deg, var(--bg-tertiary) 0%, rgba(33, 38, 45, 0.8) 100%);
+            background: var(--bg-card);
             border: 1px solid var(--border-color);
-            border-radius: 16px;
+            border-radius: 20px;
             padding: 1.5rem;
             text-align: center;
             position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
+            overflow: visible;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            min-height: 240px;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .stat-card::before {
@@ -143,10 +220,18 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+            height: 4px;
+            background: var(--gradient-primary);
             opacity: 0;
             transition: opacity 0.3s ease;
+        }
+
+        .stat-card.positive::before {
+            background: var(--gradient-success);
+        }
+
+        .stat-card.negative::before {
+            background: var(--gradient-danger);
         }
 
         .stat-card:hover::before {
@@ -154,8 +239,35 @@
         }
 
         .stat-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow);
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: var(--glow), var(--shadow);
+            border-color: var(--accent-blue);
+        }
+
+        .stat-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            background: var(--accent-blue);
+            transition: width 1s ease-in-out;
+        }
+
+        .counter {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
         }
 
         .stat-icon {
@@ -204,18 +316,31 @@
 
         .trade-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 1.5rem;
+            max-width: 100%;
         }
 
         .trade-card {
-            background: linear-gradient(135deg, var(--bg-tertiary) 0%, rgba(33, 38, 45, 0.9) 100%);
+            background: var(--bg-card);
             border: 1px solid var(--border-color);
-            border-radius: 16px;
+            border-radius: 20px;
             padding: 1.5rem;
             position: relative;
-            overflow: hidden;
+            overflow: visible;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            min-height: 350px;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .trade-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+            border-color: rgba(59, 130, 246, 0.3);
         }
 
         .trade-card::before {
@@ -224,14 +349,14 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--accent-green), var(--accent-blue));
+            height: 4px;
+            background: var(--gradient-success);
             opacity: 0;
             transition: opacity 0.3s ease;
         }
 
         .trade-card.short::before {
-            background: linear-gradient(90deg, var(--accent-red), var(--accent-yellow));
+            background: var(--gradient-danger);
         }
 
         .trade-card:hover::before {
@@ -239,9 +364,91 @@
         }
 
         .trade-card:hover {
-            transform: translateY(-6px);
+            transform: translateY(-4px) scale(1.01);
             box-shadow: var(--glow), var(--shadow);
             border-color: var(--accent-blue);
+        }
+
+        .trade-symbol-badge {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .mini-chart {
+            width: 100%;
+            height: 80px;
+            margin: 1rem 0;
+            max-height: 80px;
+            border-radius: 8px;
+            background: rgba(59, 130, 246, 0.05);
+            border: 1px solid rgba(59, 130, 246, 0.1);
+        }
+
+        /* Chart container for better positioning */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 80px;
+            margin: 1rem 0;
+            background: rgba(59, 130, 246, 0.08);
+            border-radius: 8px;
+            padding: 0;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* Trade card charts - make them more visible */
+        .trade-card .chart-container {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            margin: 0.5rem 0;
+            height: 70px;
+        }
+
+        .trade-card .mini-chart {
+            height: 70px !important;
+            max-height: 70px !important;
+            width: 100% !important;
+        }
+
+        /* Fix chart overflow - NO PADDING */
+        .stat-card .chart-container {
+            margin-top: 1rem;
+            height: 80px !important;
+            min-height: 80px !important;
+            background: rgba(59, 130, 246, 0.05);
+            border: 1px solid rgba(59, 130, 246, 0.1);
+            padding: 0;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card .mini-chart {
+            height: 80px !important;
+            max-height: 80px !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            display: block;
+            box-sizing: border-box;
+        }
+
+        /* Ensure canvas doesn't overflow */
+        .stat-card .chart-container canvas {
+            max-width: 100% !important;
+            max-height: 100% !important;
+            object-fit: contain;
         }
 
         .trade-header {
@@ -397,6 +604,139 @@
             margin: 0;
         }
 
+        /* Trade Card Metrics - Fixed Layout */
+        .trade-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .metric {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .metric-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .metric-value {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.2;
+        }
+
+        /* Trade Header */
+        .trade-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .trade-direction {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 0.25rem 0.5rem;
+            border-radius: 8px;
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .direction-long {
+            color: var(--accent-green);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .direction-short {
+            color: var(--accent-red);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        /* Confidence Bar - Fixed */
+        .confidence-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--bg-tertiary);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-green), var(--accent-blue));
+            border-radius: 3px;
+            transition: width 1s ease-in-out;
+        }
+
+        /* Risk Badge */
+        .risk-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .risk-low {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--accent-green);
+        }
+
+        .risk-medium {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--accent-yellow);
+        }
+
+        .risk-high {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--accent-red);
+        }
+
+        /* Additional spacing fixes */
+        .trade-card .row {
+            margin-left: 0;
+            margin-right: 0;
+        }
+
+        .trade-card .col-4 {
+            padding-left: 0;
+            padding-right: 0.5rem;
+        }
+
+        .trade-card .col-4:last-child {
+            padding-right: 0;
+        }
+
+        /* Ensure progress bars are visible */
+        .stat-progress, .confidence-bar {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Fix text wrapping */
+        .metric-value {
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .trade-symbol-badge {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 120px;
+        }
+
         .pulse {
             animation: pulse 2s infinite;
         }
@@ -419,20 +759,72 @@
         @media (max-width: 768px) {
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
             }
             
             .trade-grid {
                 grid-template-columns: 1fr;
             }
             
-            .header-toggle-btn {
-                padding: 6px 12px;
+            .stat-card {
+                padding: 1rem;
+                min-height: 200px;
+            }
+
+            .stat-card .chart-container {
+                height: 60px !important;
+                min-height: 60px !important;
+                margin: 0.5rem 0 0 0;
+                padding: 0;
+            }
+
+            .stat-card .mini-chart {
+                height: 60px !important;
+                max-height: 60px !important;
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+            
+            .trade-card {
+                padding: 1rem;
+                min-height: 300px;
+                height: auto;
+            }
+
+            .trade-metrics {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+
+            .metric-value {
+                font-size: 0.85rem;
+            }
+
+            .metric-label {
+                font-size: 0.7rem;
+            }
+
+            .chart-container {
+                height: 60px;
+                margin: 0.5rem 0;
+            }
+
+            .mini-chart {
+                height: 60px;
+                max-height: 60px;
+            }
+            
+            .counter {
+                font-size: 1.5rem;
+            }
+            
+            .header-toggle-btn, .theme-toggle-btn {
+                padding: 6px 10px;
                 font-size: 0.8rem;
             }
 
-            .theme-toggle-btn {
-                padding: 6px 10px;
-                font-size: 0.875rem;
+            .search-container {
+                display: none !important;
             }
         }
     </style>
@@ -442,20 +834,42 @@
     <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
-                <i class="bi bi-graph-up-arrow"></i>
-                Drew Bootstrap Dashboard
+                <i class="bi bi-rocket-takeoff"></i>
+                Elite Trading Dashboard
             </a>
-            <div class="d-flex align-items-center">
-                <button class="btn header-toggle-btn me-3" onclick="toggleView()">
-                    <i class="bi bi-code-square"></i> <span id="toggleText">View JSON</span>
+            
+            <!-- Search Bar -->
+            <div class="search-container d-none d-md-block">
+                <input type="text" class="search-input" placeholder="Search trades..." id="searchInput">
+                <i class="bi bi-search search-icon"></i>
+            </div>
+            
+            <div class="d-flex align-items-center gap-2">
+                <!-- Filter Dropdown -->
+                <div class="dropdown">
+                    <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-funnel"></i> Filter
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-dark">
+                        <li><a class="dropdown-item" href="#" onclick="filterTrades('all')">All Trades</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="filterTrades('long')">Long Only</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="filterTrades('short')">Short Only</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#" onclick="filterTrades('profitable')">Profitable</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="filterTrades('losing')">Losing</a></li>
+                    </ul>
+                </div>
+                
+                <button class="btn header-toggle-btn" onclick="toggleView()">
+                    <i class="bi bi-code-square"></i> <span id="toggleText">JSON</span>
                 </button>
-                <button class="btn theme-toggle-btn me-3" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+                <button class="btn theme-toggle-btn" onclick="toggleTheme()" title="Toggle Theme">
                     <i class="bi bi-moon-fill" id="themeIcon"></i>
                 </button>
-                <span class="badge bg-success pulse me-3">
+                <span class="badge bg-success pulse">
                     <i class="bi bi-circle-fill"></i> LIVE
                 </span>
-                <small class="text-muted" id="lastUpdate">Last updated: --:--:--</small>
+                <small class="text-muted" id="lastUpdate">--:--:--</small>
             </div>
         </div>
     </nav>
@@ -464,60 +878,66 @@
 
     <!-- Dashboard View -->
     <div id="dashboardView" class="container-fluid py-5 mt-5 fade-in">
-        <!-- Stats Overview -->
+        <!-- Enhanced Stats Overview -->
         <div class="stats-grid">
-            <div class="stat-card">
+            <div class="stat-card" onclick="animateCard(this)">
                 <div class="stat-icon text-primary">
-                    <i class="bi bi-activity"></i>
+                    <i class="bi bi-lightning-charge"></i>
                 </div>
-                <div class="stat-value text-primary">{{ stats.total_open_trades }}</div>
-                <div class="stat-label">Open Trades</div>
+                <div class="counter" data-target="{{ stats.total_open_trades }}">0</div>
+                <div class="stat-label">Active Positions</div>
+                <div class="stat-progress" style="width: {{ (stats.total_open_trades / 10) * 100 }}%"></div>
             </div>
             
-            <div class="stat-card">
+            <div class="stat-card {{ 'positive' if stats.total_open_pnl >= 0 else 'negative' }}" onclick="animateCard(this)">
                 <div class="stat-icon {{ 'text-success' if stats.total_open_pnl >= 0 else 'text-danger' }}">
-                    <i class="bi bi-{{ 'graph-up' if stats.total_open_pnl >= 0 else 'graph-down' }}"></i>
+                    <i class="bi bi-{{ 'trending-up' if stats.total_open_pnl >= 0 else 'trending-down' }}"></i>
                 </div>
-                <div class="stat-value {{ 'pnl-positive' if stats.total_open_pnl >= 0 else 'pnl-negative' }}">
-                    ${{ "{:,.2f}".format(stats.total_open_pnl) }}
+                <div class="counter {{ 'pnl-positive' if stats.total_open_pnl >= 0 else 'pnl-negative' }}" data-target="{{ stats.total_open_pnl }}">$0</div>
+                <div class="stat-label">Unrealized P&L</div>
+                <div class="chart-container">
+                    <canvas class="mini-chart" id="pnlChart"></canvas>
                 </div>
-                <div class="stat-label">Open P&L</div>
             </div>
             
-            <div class="stat-card">
+            <div class="stat-card" onclick="animateCard(this)">
                 <div class="stat-icon text-warning">
-                    <i class="bi bi-wallet2"></i>
+                    <i class="bi bi-shield-exclamation"></i>
                 </div>
-                <div class="stat-value text-warning">
-                    ${{ "{:,.0f}".format(stats.total_margin_used) }}
-                </div>
-                <div class="stat-label">Margin Used</div>
+                <div class="counter text-warning" data-target="{{ stats.total_margin_used }}">$0</div>
+                <div class="stat-label">Margin at Risk</div>
+                <div class="stat-progress" style="width: {{ (stats.total_margin_used / 200000) * 100 }}%"></div>
             </div>
             
-            <div class="stat-card">
+            <div class="stat-card" onclick="animateCard(this)">
                 <div class="stat-icon text-info">
-                    <i class="bi bi-speedometer2"></i>
+                    <i class="bi bi-bullseye"></i>
                 </div>
-                <div class="stat-value text-info">{{ stats.avg_confidence }}%</div>
+                <div class="counter text-info" data-target="{{ stats.avg_confidence }}">0%</div>
                 <div class="stat-label">Avg Confidence</div>
+                <div class="chart-container">
+                    <canvas class="mini-chart" id="confidenceChart"></canvas>
+                </div>
             </div>
             
-            <div class="stat-card">
+            <div class="stat-card" onclick="animateCard(this)">
                 <div class="stat-icon text-success">
-                    <i class="bi bi-bank"></i>
+                    <i class="bi bi-bank2"></i>
                 </div>
-                <div class="stat-value text-success">
-                    ${{ "{:,.0f}".format(stats.account_equity) }}
-                </div>
-                <div class="stat-label">Account Equity</div>
+                <div class="counter text-success" data-target="{{ stats.account_equity }}">$0</div>
+                <div class="stat-label">Portfolio Value</div>
+                <div class="stat-progress" style="width: 85%"></div>
             </div>
             
-            <div class="stat-card">
+            <div class="stat-card" onclick="animateCard(this)">
                 <div class="stat-icon text-secondary">
-                    <i class="bi bi-clock-history"></i>
+                    <i class="bi bi-archive"></i>
                 </div>
-                <div class="stat-value text-secondary">{{ stats.total_recent_trades }}</div>
-                <div class="stat-label">Recent Trades</div>
+                <div class="counter text-secondary" data-target="{{ stats.total_recent_trades }}">0</div>
+                <div class="stat-label">Trade History</div>
+                <div class="chart-container">
+                    <canvas class="mini-chart" id="historyChart"></canvas>
+                </div>
             </div>
         </div>
 
@@ -529,14 +949,20 @@
                 <span class="section-badge">{{ open_trades|length }} Open</span>
             </div>
             
-            <div class="trade-grid">
+            <div class="trade-grid" id="tradeGrid">
                 {% for trade in open_trades %}
-                <div class="trade-card {{ trade.direction }}">
+                <div class="trade-card {{ trade.direction }}" data-symbol="{{ trade.symbol }}" data-direction="{{ trade.direction }}" data-pnl="{{ trade.pnl }}">
                     <div class="trade-header">
-                        <div class="trade-symbol">{{ trade.symbol }}</div>
+                        <div class="trade-symbol-badge">{{ trade.symbol }}</div>
                         <div class="trade-direction direction-{{ trade.direction }}">
-                            {{ trade.direction }}
+                            <i class="bi bi-{{ 'arrow-up' if trade.direction == 'long' else 'arrow-down' }}"></i>
+                            {{ trade.direction.upper() }}
                         </div>
+                    </div>
+                    
+                    <!-- Mini Chart for Trade -->
+                    <div class="chart-container">
+                        <canvas class="mini-chart" id="tradeChart{{ loop.index }}"></canvas>
                     </div>
                     
                     <div class="trade-metrics">
@@ -561,22 +987,24 @@
                         </div>
                     </div>
                     
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <div>
+                    <div class="row mb-3">
+                        <div class="col-4">
                             <div class="metric-label">Margin Used</div>
                             <div class="metric-value">${{ "{:,.0f}".format(trade.margin_used) }}</div>
                         </div>
-                        <div>
+                        <div class="col-4">
                             <div class="metric-label">Duration</div>
                             <div class="metric-value">{{ trade.duration }}</div>
                         </div>
-                        <div class="risk-badge risk-{{ trade.risk_level.lower() }}">
-                            {{ trade.risk_level }} Risk
+                        <div class="col-4 d-flex align-items-end justify-content-end">
+                            <div class="risk-badge risk-{{ trade.risk_level.lower() }}">
+                                {{ trade.risk_level }} Risk
+                            </div>
                         </div>
                     </div>
                     
-                    <div>
-                        <div class="d-flex justify-content-between align-items-center mb-1">
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
                             <span class="metric-label">Confidence Score</span>
                             <span class="metric-value">{{ trade.confidence_score }}%</span>
                         </div>
@@ -585,9 +1013,10 @@
                         </div>
                     </div>
                     
-                    <div class="mt-3 pt-3 border-top" style="border-color: var(--border-color) !important;">
-                        <small class="text-muted">
-                            <i class="bi bi-clock"></i> {{ trade.entry_time }}
+                    <div class="mt-auto pt-3 border-top" style="border-color: var(--border-color) !important;">
+                        <small class="text-muted d-flex align-items-center gap-1">
+                            <i class="bi bi-clock"></i> 
+                            <span>{{ trade.entry_time }}</span>
                         </small>
                     </div>
                 </div>
@@ -675,12 +1104,195 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         let isJsonView = false;
+        let charts = {};
+
+        // Enhanced counter animation
+        function animateCounter(element, target, duration = 2000) {
+            const start = 0;
+            const increment = target / (duration / 16);
+            let current = start;
+            
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                
+                if (element.dataset.target.includes('$')) {
+                    element.textContent = '$' + Math.floor(current).toLocaleString();
+                } else if (element.dataset.target.includes('%')) {
+                    element.textContent = Math.floor(current) + '%';
+                } else {
+                    element.textContent = Math.floor(current).toLocaleString();
+                }
+            }, 16);
+        }
+
+        // Animate stat card
+        function animateCard(card) {
+            card.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                card.style.transform = 'scale(1)';
+            }, 150);
+        }
+
+        // Create mini charts (improved with debugging)
+        function createMiniChart(canvasId, data, type = 'line', color = '#3b82f6') {
+            try {
+                const ctx = document.getElementById(canvasId);
+                console.log(`Creating chart for ${canvasId}:`, ctx ? 'Canvas found' : 'Canvas NOT found');
+                
+                if (!ctx) {
+                    console.error(`Canvas element ${canvasId} not found`);
+                    return null;
+                }
+                
+                if (!window.Chart) {
+                    console.error('Chart.js not loaded');
+                    return null;
+                }
+                
+                // Clear any existing chart
+                if (ctx.chart) {
+                    ctx.chart.destroy();
+                }
+                
+                // Set canvas size to match container exactly
+                setTimeout(() => {
+                    const container = ctx.parentElement;
+                    if (container) {
+                        const containerRect = container.getBoundingClientRect();
+                        ctx.width = containerRect.width;
+                        ctx.height = containerRect.height;
+                        console.log(`Canvas ${canvasId} sized to: ${ctx.width}x${ctx.height} (container: ${containerRect.width}x${containerRect.height})`);
+                    }
+                }, 100);
+                
+                const chart = new Chart(ctx, {
+                    type: type,
+                    data: {
+                        labels: Array.from({length: data.length}, (_, i) => ''),
+                        datasets: [{
+                            data: data,
+                            borderColor: color,
+                            backgroundColor: `${color}30`,
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 0,
+                            pointHoverRadius: 5,
+                            pointBackgroundColor: color,
+                            pointBorderColor: '#ffffff',
+                            pointBorderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: {
+                            intersect: false,
+                            mode: 'index'
+                        },
+                        plugins: { 
+                            legend: { display: false },
+                            tooltip: { enabled: false }
+                        },
+                        scales: {
+                            x: { 
+                                display: false,
+                                grid: { display: false }
+                            },
+                            y: { 
+                                display: false,
+                                grid: { display: false }
+                            }
+                        },
+                        elements: { 
+                            point: { radius: 0 }
+                        },
+                        animation: { 
+                            duration: 1000,
+                            easing: 'easeInOutQuart'
+                        }
+                    }
+                });
+                
+                ctx.chart = chart;
+                console.log(`Chart created successfully for ${canvasId}`);
+                return chart;
+            } catch (error) {
+                console.error(`Chart creation failed for ${canvasId}:`, error);
+                
+                // Create a fallback visual indicator
+                const container = ctx.parentElement;
+                if (container && container.classList.contains('chart-container')) {
+                    container.innerHTML = `
+                        <div style="
+                            width: 100%; 
+                            height: 100%; 
+                            display: flex; 
+                            align-items: center; 
+                            justify-content: center;
+                            background: linear-gradient(45deg, ${color}40, ${color}20);
+                            border-radius: 4px;
+                            color: ${color};
+                            font-size: 0.8rem;
+                            font-weight: 600;
+                            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+                        ">
+                            � ${canvasId.includes('trade') ? 'Price' : 'Chart'}
+                        </div>
+                    `;
+                }
+                return null;
+            }
+        }
+
+        // Filter trades
+        function filterTrades(filter) {
+            const cards = document.querySelectorAll('.trade-card');
+            cards.forEach(card => {
+                const symbol = card.dataset.symbol;
+                const direction = card.dataset.direction;
+                const pnl = parseFloat(card.dataset.pnl);
+                
+                let show = true;
+                switch(filter) {
+                    case 'long': show = direction === 'long'; break;
+                    case 'short': show = direction === 'short'; break;
+                    case 'profitable': show = pnl >= 0; break;
+                    case 'losing': show = pnl < 0; break;
+                }
+                
+                card.style.display = show ? 'block' : 'none';
+                if (show) {
+                    card.style.animation = 'fadeIn 0.5s ease-in';
+                }
+            });
+        }
+
+        // Search functionality
+        function setupSearch() {
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    const query = e.target.value.toLowerCase();
+                    const cards = document.querySelectorAll('.trade-card');
+                    
+                    cards.forEach(card => {
+                        const symbol = card.dataset.symbol.toLowerCase();
+                        const show = symbol.includes(query);
+                        card.style.display = show ? 'block' : 'none';
+                    });
+                });
+            }
+        }
 
         // Update timestamp
         function updateTimestamp() {
             const now = new Date();
-            document.getElementById('lastUpdate').textContent = 
-                `Last updated: ${now.toLocaleTimeString()}`;
+            document.getElementById('lastUpdate').textContent = now.toLocaleTimeString();
         }
 
         // Toggle between dashboard and JSON view
@@ -691,24 +1303,39 @@
 
             if (!isJsonView) {
                 try {
-                    const response = await fetch('/api');
+                    const response = await fetch('/api', {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
                     const data = await response.json();
                     document.getElementById('jsonData').textContent = JSON.stringify(data, null, 2);
                     
                     dashboardView.style.display = 'none';
                     jsonView.style.display = 'block';
                     jsonView.classList.add('fade-in');
-                    toggleText.innerHTML = '<i class="bi bi-speedometer2"></i> View Dashboard';
+                    toggleText.innerHTML = 'Dashboard';
                     isJsonView = true;
                 } catch (error) {
                     console.error('Error loading JSON data:', error);
-                    alert('Error loading JSON data: ' + error.message);
+                    // Fallback - still show the view but with error message
+                    document.getElementById('jsonData').textContent = `Error loading data: ${error.message}\n\nPlease check if the server is running and the /api endpoint is accessible.`;
+                    dashboardView.style.display = 'none';
+                    jsonView.style.display = 'block';
+                    toggleText.innerHTML = 'Dashboard';
+                    isJsonView = true;
                 }
             } else {
                 dashboardView.style.display = 'block';
                 dashboardView.classList.add('fade-in');
                 jsonView.style.display = 'none';
-                toggleText.innerHTML = '<i class="bi bi-code-square"></i> View JSON';
+                toggleText.innerHTML = 'JSON';
                 isJsonView = false;
             }
         }
@@ -743,15 +1370,111 @@
             }
         }
 
-        // Initialize
-        initTheme();
-        updateTimestamp();
+        // Initialize everything (simplified)
+        function initDashboard() {
+            initTheme();
+            updateTimestamp();
+            setupSearch();
+            
+            // Animate counters on load (simplified)
+            setTimeout(() => {
+                document.querySelectorAll('.counter').forEach(counter => {
+                    const target = parseFloat(counter.dataset.target.replace(/[$,%]/g, ''));
+                    if (!isNaN(target)) {
+                        animateCounter(counter, target, 1500);
+                    }
+                });
+            }, 300);
+            
+            // Create charts only if Chart.js is loaded
+            setTimeout(() => {
+                console.log('Starting chart initialization...');
+                console.log('Chart.js available:', !!window.Chart);
+                
+                if (window.Chart) {
+                    try {
+                        // P&L Chart - Green/Red based on trend
+                        const pnlData = [100, 150, 120, 180, 160, 200, 175, 220, 195, 240];
+                        const pnlColor = pnlData[pnlData.length - 1] > pnlData[0] ? '#10b981' : '#ef4444';
+                        console.log('Creating P&L chart...');
+                        createMiniChart('pnlChart', pnlData, 'line', pnlColor);
+                        
+                        // Confidence Chart - Blue gradient
+                        const confidenceData = [75, 78, 82, 85, 83, 88, 90, 87, 92, 89];
+                        console.log('Creating Confidence chart...');
+                        createMiniChart('confidenceChart', confidenceData, 'line', '#3b82f6');
+                        
+                        // History Chart - Purple
+                        const historyData = [5, 8, 6, 12, 10, 15, 18, 14, 20, 25];
+                        console.log('Creating History chart...');
+                        createMiniChart('historyChart', historyData, 'line', '#8b5cf6');
+                        
+                        // Trade charts with realistic price movements
+                        console.log('Creating trade charts...');
+                        for (let i = 1; i <= 8; i++) {
+                            const basePrice = 400 + (i * 50);
+                            const priceData = [];
+                            let currentPrice = basePrice;
+                            
+                            // Generate realistic price movement
+                            for (let j = 0; j < 15; j++) {
+                                const change = (Math.random() - 0.5) * 10;
+                                currentPrice += change;
+                                priceData.push(Math.max(currentPrice, basePrice * 0.8));
+                            }
+                            
+                            // More vibrant colors based on trend
+                            const isPositive = priceData[priceData.length - 1] > priceData[0];
+                            const color = isPositive ? '#22c55e' : '#f87171'; // Brighter green/red
+                            
+                            createMiniChart(`tradeChart${i}`, priceData, 'line', color);
+                        }
+                        
+                        console.log('All charts initialization completed');
+                    } catch (error) {
+                        console.error('Charts initialization failed:', error);
+                    }
+                } else {
+                    console.warn('Chart.js not available, creating fallback indicators...');
+                    
+                    // Create fallback indicators
+                    ['pnlChart', 'confidenceChart', 'historyChart'].forEach(chartId => {
+                        const canvas = document.getElementById(chartId);
+                        if (canvas && canvas.parentElement) {
+                            canvas.parentElement.innerHTML = `
+                                <div style="
+                                    width: 100%; 
+                                    height: 100%; 
+                                    display: flex; 
+                                    align-items: center; 
+                                    justify-content: center;
+                                    background: linear-gradient(45deg, #3b82f620, #3b82f610);
+                                    border-radius: 4px;
+                                    color: #3b82f6;
+                                    font-size: 0.7rem;
+                                    font-weight: 500;
+                                ">
+                                    📈 Chart
+                                </div>
+                            `;
+                        }
+                    });
+                }
+            }, 2000);
+        }
+
+        // Initialize dashboard
+        initDashboard();
         
-        // Auto-refresh every 30 seconds
+        // Enhanced auto-refresh with smooth transitions
         setInterval(() => {
             updateTimestamp();
             if (!isJsonView) {
-                location.reload();
+                // Add loading state
+                document.body.style.opacity = '0.9';
+                setTimeout(() => {
+                    location.reload();
+                }, 500);
             }
         }, 30000);
 
