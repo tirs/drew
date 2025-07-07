@@ -2,13 +2,11 @@ from flask import Flask, render_template, jsonify
 import random
 import os
 from datetime import datetime, timedelta
-from dotenv import load_dotenv
 
-load_dotenv()
 app = Flask(__name__)
 
 # Production config
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-key-change-in-production')
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'railway-secret-key-2024')
 app.config['ENV'] = os.environ.get('FLASK_ENV', 'production')
 
 # Security: Remove server headers that might expose information
@@ -88,6 +86,11 @@ def generate_trade_data():
         recent_trades.append(trade)
     
     return open_trades, recent_trades
+
+@app.route('/health')
+def health_check():
+    """Simple health check endpoint"""
+    return {'status': 'healthy', 'timestamp': datetime.now().isoformat()}, 200
 
 @app.route('/')
 @app.route('/drew/')
