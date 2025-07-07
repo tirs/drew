@@ -2,8 +2,14 @@ from flask import Flask, render_template, jsonify
 import random
 import os
 from datetime import datetime, timedelta
+from dotenv import load_dotenv
 
+load_dotenv()
 app = Flask(__name__)
+
+# Production config
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-key-change-in-production')
+app.config['ENV'] = os.environ.get('FLASK_ENV', 'production')
 
 # Security: Remove server headers that might expose information
 @app.after_request
@@ -128,10 +134,6 @@ def api_data():
     })
 
 if __name__ == '__main__':
-    # Development mode
     port = int(os.environ.get('PORT', 5000))
-    debug = os.environ.get('FLASK_ENV') != 'production'
+    debug = os.environ.get('FLASK_ENV') == 'development'
     app.run(debug=debug, host='0.0.0.0', port=port)
-else:
-    # Production mode
-    app.debug = False

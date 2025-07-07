@@ -68,7 +68,6 @@ NOTES.md
 wsgi.py
 
 # Platform specific
-railway.json
 vercel.json
 
 # Test files
